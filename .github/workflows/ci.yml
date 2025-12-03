@@ -63,10 +63,7 @@ jobs:
       - name: Run Selenium Test (Chrome Headless)
         run: ./mvnw test -Dtest=BasicLoginTest
 
-  # ----------------------------------------------------------
-  # 3️⃣ SONARCLOUD ANALYSIS
-  # ----------------------------------------------------------
-  sonarcloud:
+ sonarcloud:
     runs-on: ubuntu-latest
     needs: selenium
     steps:
@@ -84,9 +81,12 @@ jobs:
       - name: SonarCloud Scan + Quality Gate
         uses: SonarSource/sonarcloud-github-action@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_G }}
+     
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey="MeghaKeshri_DEVOPS-2023-4Y"
-            -Dsonar.organization="meghakeshri"
+            -Dsonar.projectKey=MeghaKeshri_DEVOPS-2023-4Y
+            -Dsonar.organization=meghakeshri
