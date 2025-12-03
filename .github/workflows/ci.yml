@@ -11,11 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repo
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # Needed for SonarCloud analysis
+          fetch-depth: 0   # Needed for SonarCloud
 
+      # Fix mvnw permission issue
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      # Setup Java
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -23,19 +29,24 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # Build first (skip tests)
       - name: Build & Test (skip tests first)
         run: ./mvnw clean install -DskipTests
 
+      # Start app in background
       - name: Start App for Selenium
         run: |
           nohup ./mvnw spring-boot:run &
-          echo "Waiting for app..."
+          echo "Waiting for app to start..."
           sleep 45
 
+      # Run Selenium test
       - name: Run Selenium Test
         run: ./mvnw test -Dtest=BasicLoginTest
 
-
+      # --------------------------
+      # SonarCloud Analysis
+      # --------------------------
       - name: SonarCloud Scan (only on push to main)
         if: github.event_name == 'push'
         env:
