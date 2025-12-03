@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0   # Needed for SonarCloud analysis
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -35,12 +35,14 @@ jobs:
       - name: Run Selenium Test
         run: ./mvnw test -Dtest=BasicLoginTest
 
-      - name: SonarQube Scan (only on push to main)
+
+      - name: SonarCloud Scan (only on push to main)
         if: github.event_name == 'push'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./mvnw sonar:sonar \
-            -Dsonar.projectKey=${{ github.repository }} \
+          ./mvnw verify sonar:sonar \
+            -Dsonar.projectKey=<YOUR_PROJECT_KEY> \
+            -Dsonar.organization=<YOUR_ORG_KEY> \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.token=$SONAR_TOKEN
