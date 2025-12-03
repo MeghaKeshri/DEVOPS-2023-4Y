@@ -57,14 +57,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Wait for App (from previous job)
+      - name: Wait for App
         run: sleep 20
 
-      - name: Run Selenium Test (Chrome Headless)
+      - name: Run Selenium Test
         run: ./mvnw test -Dtest=BasicLoginTest
 
   # ----------------------------------------------------------
-  # 3️⃣ SONARCLOUD ANALYSIS
+  # 3️⃣ SONARCLOUD ANALYSIS (MAVEN PLUGIN - correct way)
   # ----------------------------------------------------------
   sonarcloud:
     runs-on: ubuntu-latest
@@ -75,20 +75,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Make mvnw executable
+        run: chmod +x ./mvnw
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: SonarCloud Scan + Quality Gate
-        uses: SonarSource/sonarcloud-github-action@v3
+      - name: Run SonarCloud Analysis (Maven)
         env:
-          # GitHub's built-in token (required)
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Your SonarCloud token (must be added under repository secrets)
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=MeghaKeshri_DEVOPS-2023-4Y
-            -Dsonar.organization=meghakeshri
+        run: |
+          ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=MeghaKeshri_DEVOPS-2023-4Y \
+            -Dsonar.organization=meghakeshri \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN}
