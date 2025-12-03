@@ -93,4 +93,4 @@ jobs:
             -Dsonar.projectKey=MeghaKeshri_DEVOPS-2023-4Y \
             -Dsonar.organization=meghakeshri \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${SONAR_TOKEN}
+          
