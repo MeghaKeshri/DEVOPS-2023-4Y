@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 jobs:
   # ----------------------------------------------------------
-  # 1️⃣ BUILD + RUN APP build
+  # 1️⃣ BUILD + RUN APP 
   # ----------------------------------------------------------
   build-and-run:
     runs-on: ubuntu-latest
