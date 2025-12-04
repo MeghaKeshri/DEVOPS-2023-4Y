@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: Student Management System API
+  description: Simple Spring Boot CRUD + Authentication application for managing students with role-based access (ADMIN / USER)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /login:
+    get:
+      summary: Show login page
+      operationId: showLogin
+      responses:
+        '200':
+          description: Login page (HTML)
+          content:
+            text/html: {}
+
+  /dashboard:
+    get:
+      summary: Admin dashboard (requires ADMIN role)
+      operationId: adminDashboard
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Admin dashboard with student count
+          content:
+            text/html: {}
+        '403':
+          description: Forbidden - user does not have ADMIN role
+
+  /home:
+    get:
+      summary: User (student) home page
+      operationId: userHome
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Regular user home page
+          content:
+            text/html: {}
+
+  /students:
+    get:
+      summary: List all students
+      operationId: listStudents
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: HTML page listing all students
+          content:
+            text/html: {}
+
+  /students/new:
+    get:
+      summary: Show form to create a new student (ADMIN only)
+      operationId: showCreateForm
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Create student form
+        '403':
+          description: Access denied (not ADMIN)
+
+  /students:
+    post:
+      summary: Save a new student (ADMIN only)
+      operationId: saveStudent
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentForm'
+      responses:
+        '302':
+          description: Redirect to /students after save
+
+  /students/edit/{id}:
+    get:
+      summary: Edit student form (ADMIN only)
+      operationId: showEditForm
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Edit form pre-filled with student data
+        '403':
+          description: Forbidden
+
+  /students/{id}:
+    post:
+      summary: Update existing student (ADMIN only)
+      operationId: updateStudent
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentForm'
+      responses:
+        '302':
+          description: Redirect to student list
+
+  /students/delete/{id}:
+    get:
+      summary: Delete a student (ADMIN only)
+      operationId: deleteStudent
+      security:
+        - basicAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '302':
+          description: Redirect to /students after deletion
+        '403':
+          description: Forbidden
+
+  /register:
+    get:
+      summary: Show registration form
+      operationId: showRegister
+      responses:
+        '200':
+          description: Registration page
+
+    post:
+      summary: Register a new user (public)
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+              required:
+                - username
+                - password
+      responses:
+        '302':
+          description: Redirect to login page on success
+        '200':
+          description: Registration form with error (username taken)
+
+components:
+  schemas:
+    StudentForm:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        # add more fields as per your Student entity
+      required:
+        - name
+        - email
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID   # Spring Security default session cookie
+
+security:
+  - cookieAuth: []
+  - basicAuth: []
