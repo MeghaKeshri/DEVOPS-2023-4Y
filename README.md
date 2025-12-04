@@ -3,3 +3,5 @@ Student Management System
 
 API DOCS:
 
+TEAM:
+Ganga Sharma , Megha Keshri and Shivam
