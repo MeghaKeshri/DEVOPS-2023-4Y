@@ -51,7 +51,7 @@ A simple Spring Boot web application to manage student records with secure login
 - **Spring Security**
 - **Spring Data JPA / Hibernate**
 - **Thymeleaf**
-- **MySQL / H2 Database**
+- ** H2 Database**
 - **Maven**
 
 > ☁️ *Previously deployed using AWS Academy Learner Lab (now expired).*
