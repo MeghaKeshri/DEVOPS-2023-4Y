@@ -56,6 +56,14 @@ A simple Spring Boot web application to manage student records with secure login
 
 > ☁️ *Previously deployed using AWS Academy Learner Lab (now expired).*
 
+
+## Screenshots of Swagger API
+<img width="1497" height="785" alt="Screenshot 2025-12-04 at 7 50 00 PM" src="https://github.com/user-attachments/assets/9b0546ec-0a3a-43a7-85d5-ab0d9de3bd68" />
+<img width="1506" height="790" alt="Screenshot 2025-12-04 at 7 50 06 PM" src="https://github.com/user-attachments/assets/a74a80ea-5083-426e-90b4-22a3ed17171b" />
+<img width="1477" height="349" alt="Screenshot 2025-12-04 at 7 50 13 PM" src="https://github.com/user-attachments/assets/6201d5c9-5e68-41c3-909f-8325f2ae1701" />
+
+
+
 ---
 
 ## 🚀 How to Run Locally
