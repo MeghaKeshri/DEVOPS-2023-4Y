@@ -20,7 +20,7 @@ jobs:
         aws-region: ap-south-1
 
     # -------------------------------------------------------
-    # 1️⃣ Login to ECR
+    # 1️⃣ Login to ECR,
     # -------------------------------------------------------
     - name: Login to Amazon ECR
       id: login-ecr
